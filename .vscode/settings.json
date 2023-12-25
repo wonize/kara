@@ -1,3 +1,7 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "deno.path": "/usr/bin/deno",
+  "deno.enable": true,
+  "deno.unstable": false,
+  "deno.lint": true,
 }
