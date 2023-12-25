@@ -1,9 +1,10 @@
 import type { Context, Middleware, Next } from 'https://deno.land/x/oak@v12.6.1/mod.ts';
 import { Router, Status } from 'https://deno.land/x/oak@v12.6.1/mod.ts';
 
-const route = new Router({ sensitive: true });
+const AuthRoute = new Router({ sensitive: true });
 
-const forward: Middleware = function forward(_: Context, next: Next): Promise<unknown> {
+
+const forward: Middleware = function forward(_: Context, next: Next) {
 	return next();
 };
 
@@ -15,48 +16,41 @@ const notImplemented: Middleware = function unimplmented($: Context) {
 	return $;
 };
 
-// Auth
-const Auth = route.all('/auth', forward);
 
-// Authentication
-const AuthLogin = Auth.post('/login', forward);
-const AuthRegister = Auth.post('/register', forward);
-const AuthRefresh = Auth.post('/refresh', forward);
-const AuthLogout = Auth.delete('/', forward);
-const AuthLogoutGet = Auth.get('/logout', forward);
-const AuthChangePassword = Auth.put('/password', forward);
-const AuthVerifyEmail = Auth.get('/verify-email', forward);
+const AuthLoginRoute = AuthRoute.post('/auth/login', forward);
+const AuthRegisterRoute = AuthRoute.post('/auth/register', forward);
+const AuthRefreshRoute = AuthRoute.post('/auth/refresh', forward);
+const AuthLogoutRoute = AuthRoute.delete('/auth', forward);
+const AuthLogoutGetRoute = AuthRoute.get('/auth/logout', forward);
+const AuthChangePasswordRoute = AuthRoute.put('/auth/password', forward);
+const AuthVerifyEmailRoute = AuthRoute.get('/auth/verify-email', forward);
 
 // OAuth
-const OAuth = Auth.all('/oauth', forward);
-const OAuthGitHub = OAuth.post('/github', notImplemented);
-const OAuthGoogle = OAuth.post('/google', forward);
-const OAuthLinkedIn = OAuth.post('/linkedin', forward);
+const OAuthGitHubRoute = AuthRoute.post('auth/oauth/github', notImplemented);
+const OAuthGoogleRoute = AuthRoute.post('auth/oauth/google', forward);
+const OAuthLinkedInRoute = AuthRoute.post('auth/oauth/linkedin', forward);
 
 // Athorization
-const ACL = Auth.all('/acl', forward);
-const ACLResources = ACL.get('/resources', forward);
-const ACLResourceExist = ACL.get('/:resource', forward);
-const ACLRequestValidation = ACL.get('/:resource/:action', forward);
+const ACLResourcesRoute = AuthRoute.get('/auth/acl/resources', forward);
+const ACLResourceExistRoute = AuthRoute.get('/auth/acl/:resource', forward);
+const ACLRequestValidationRoute = AuthRoute.get('/auth/acl/:resource/:action', forward);
 
-// Rest
-Auth.all('/*', notImplemented);
+const AuthRestRoute = AuthRoute.all('/*', notImplemented);
 
 export {
-	ACL,
-	ACLRequestValidation,
-	ACLResourceExist,
-	ACLResources,
-	Auth,
-	AuthChangePassword,
-	AuthLogin,
-	AuthLogout,
-	AuthLogoutGet,
-	AuthRefresh,
-	AuthRegister,
-	AuthVerifyEmail,
-	OAuth,
-	OAuthGitHub,
-	OAuthGoogle,
-	OAuthLinkedIn,
+	ACLRequestValidationRoute,
+	ACLResourceExistRoute,
+	ACLResourcesRoute,
+	AuthChangePasswordRoute,
+	AuthLoginRoute,
+	AuthLogoutGetRoute,
+	AuthLogoutRoute,
+	AuthRefreshRoute,
+	AuthRegisterRoute,
+	AuthRestRoute,
+	AuthRoute,
+	AuthVerifyEmailRoute,
+	OAuthGitHubRoute,
+	OAuthGoogleRoute,
+	OAuthLinkedInRoute,
 };
