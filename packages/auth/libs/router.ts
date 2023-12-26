@@ -3,7 +3,6 @@ import { Router, Status } from 'https://deno.land/x/oak@v12.6.1/mod.ts';
 
 const AuthRoute = new Router({ sensitive: true });
 
-
 const forward: Middleware = function forward(_: Context, next: Next) {
 	return next();
 };
@@ -15,7 +14,6 @@ const notImplemented: Middleware = function unimplmented($: Context) {
 	$.response.headers.set('Content-Type', 'application/json');
 	return $;
 };
-
 
 const AuthLoginRoute = AuthRoute.post('/auth/login', forward);
 const AuthRegisterRoute = AuthRoute.post('/auth/register', forward);
