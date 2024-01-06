@@ -13,6 +13,15 @@
 	"plugins": ["prettier-plugin-astro", "prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
 	"overrides": [
 		{
+			"files": ["**/*.svg", "**/*.xml"],
+			"options": {
+				"parser": "html",
+				"htmlWhitespaceSensitivity": "css",
+				"tabWidth": 2,
+				"useTabs": false
+			}
+		},
+		{
 			"files": ["**/*.astro"],
 			"options": {
 				"editorconfig": true,
